@@ -107,9 +107,9 @@ class Ball:
 
         if (self.x - self.radius) > map_info[GOAL_LEFT_X] and (self.x + self.radius) < map_info[GOAL_RIGHT_X]:
             if (self.y + self.radius) < map_info[TOP_BOUND]:
-                return 2
-            elif (self.y - self.radius) > map_info[BOTTOM_BOUND]:
                 return 1
+            elif (self.y - self.radius) > map_info[BOTTOM_BOUND]:
+                return 2
         else:
             if (self.y - self.radius) < map_info[TOP_BOUND]:
                 self.y = map_info[TOP_BOUND] + self.radius
