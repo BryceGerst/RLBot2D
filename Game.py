@@ -44,7 +44,7 @@ map_info = [0, screen_w, goal_height, screen_h - goal_height, goal_height, goal_
 
 games_left = 5
 
-while games_left >= 0:
+while games_left > 0:
     game_over = False
     players = []
     player_one = Car(screen_w // 5, 3 * screen_h // 4, Vector(0,0), car.get_width(), car.get_height(), math.pi / 6, 15)
@@ -61,7 +61,7 @@ while games_left >= 0:
 
         keys_down = pygame.key.get_pressed()
         player_one_inputs = [keys_down[pygame.K_w], keys_down[pygame.K_s], keys_down[pygame.K_a], keys_down[pygame.K_d], keys_down[pygame.K_LSHIFT]]
-        player_two_inputs = player_one_inputs#[random.randint(0, 1), random.randint(0, 1), random.randint(0, 1), random.randint(0, 1), random.randint(0, 1)]
+        player_two_inputs = [random.randint(0, 1), random.randint(0, 1), random.randint(0, 1), random.randint(0, 1), random.randint(0, 1)]
 
         #screen.fill((0, 0, 0))
 
