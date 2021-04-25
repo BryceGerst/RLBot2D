@@ -171,6 +171,8 @@ class Car:
                 
                 self.velocity.plus(forward.scale(wheel_power), modify_self=True)
                 self.angle = math.atan2(-forward.j, forward.i)
+                if self.angle < 0:
+                    self.angle += 2 * math.pi
             else:
                 if inputs[2] or inputs[3]:
                     wheel_angle += ((inputs[3] - inputs[2]) * wheel_turn_strength)
@@ -178,6 +180,8 @@ class Car:
                 
                 self.velocity.plus(backward.scale(-wheel_power), modify_self=True)
                 self.angle = math.atan2(-backward.j, backward.i)
+                if self.angle < 0:
+                    self.angle += 2 * math.pi
                 
         # ensures the car is not speeding
         if self.velocity.dot(self.velocity) > (self.max_speed * self.max_speed):

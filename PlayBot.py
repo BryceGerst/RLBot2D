@@ -1,7 +1,7 @@
 import pygame, sys, math, random
 import numpy as np
 from PhysicsObject import Ball, Car, Vector
-from NNet import init_nnet
+from NNet import init_nnet, train_nnet
 from SimpleBot import SimpleBot
 from SmarterBot import SmarterBot
 
@@ -60,7 +60,7 @@ goal_left_x = 289
 goal_right_x = 611
 map_info = [0, screen_w, goal_height, screen_h - goal_height, goal_height, goal_left_x, goal_right_x]
 
-games_left = 5
+games_left = 10
 
 nnet = init_nnet()
 Bot = SmarterBot(map_info)
@@ -91,15 +91,16 @@ while games_left > 0:
         player_one_data = gen_game_data(player_one, player_two, game_ball, 1)
         player_two_data = gen_game_data(player_one, player_two, game_ball, 2)
         
-        player_one_inputs = [keys_down[pygame.K_w], keys_down[pygame.K_s], keys_down[pygame.K_a], keys_down[pygame.K_d], keys_down[pygame.K_LSHIFT]]
-##        player_two_inputs = []
-##        
-##        player_two_result = nnet(player_two_data)
-##        #print(player_two_result)
-##        for i in range(len(player_two_result[0])):
-##            player_two_inputs.append(round(player_two_result[0][i].numpy()))
+        player_one_inputs = Bot.get_move(player_one_data[0])#[keys_down[pygame.K_w], keys_down[pygame.K_s], keys_down[pygame.K_a], keys_down[pygame.K_d], keys_down[pygame.K_LSHIFT]]
+        player_two_inputs = []
+        
+        player_two_result = nnet(player_two_data)
+        #print(player_two_result)
+        for i in range(len(player_two_result[0])):
+            #print(player_two_result[0][0].numpy())
+            player_two_inputs.append(round(player_two_result[0][i].numpy()))
 
-        player_two_inputs = Bot.get_move(player_two_data[0])
+        #player_two_inputs = Bot.get_move(player_two_data[0])
 
         if frame_num % record_interval == 0:
             inputs.append(player_one_data)
@@ -127,23 +128,23 @@ while games_left > 0:
                 draw_angle(screen, car, math.degrees(player.angle), player.x, player.y)
 
         frame_num += 1
-        clock.tick(60)
+        #clock.tick(60)
         pygame.display.update()
             
     games_left -= 1
 
-##    train_inputs = []
-##    train_outputs = []
-##    for i in range(winner - 1, len(outputs), 2):
-##        train_inputs.append(inputs[i][0])
-##        train_outputs.append(np.asarray(outputs[i]))
-##        
-##    x = np.asarray(train_inputs)
-##    y = np.asarray(train_outputs)
-##
-##    #print(y)
-##    
-##    nnet.fit(x, y, epochs=100)
+    train_inputs = []
+    train_outputs = []
+    for i in range(winner - 1, len(outputs), 2):
+        train_inputs.append(inputs[i][0])
+        train_outputs.append(np.asarray(outputs[i]))
+        
+    x = np.asarray(train_inputs)
+    y = np.asarray(train_outputs)
+
+    #print(y)
+    
+    nnet = train_nnet(nnet, x, y)
     
 
 
